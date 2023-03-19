@@ -1,13 +1,17 @@
 package dev.hepno.dodgeball.Instances;
 
+import com.google.common.collect.TreeMultimap;
 import dev.hepno.dodgeball.Dodgeball;
 import dev.hepno.dodgeball.GameState;
 import dev.hepno.dodgeball.Managers.ConfigurationManager;
+import dev.hepno.dodgeball.Teams.Team;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,6 +24,7 @@ public class Arena {
 
     private GameState state;
     private List<UUID> players;
+    private HashMap<UUID, Team> teams;
     private Countdown countdown;
     private Game game;
 
@@ -30,6 +35,7 @@ public class Arena {
 
         this.state = GameState.RECRUITING;
         this.players = new ArrayList<>();
+        this.teams = new HashMap<>();
         this.countdown = new Countdown(plugin, this);
         this.game = new Game(this);
     }
@@ -72,10 +78,31 @@ public class Arena {
     public List<UUID> getPlayers() { return players; }
     public Game getGame() { return game; }
 
+    public int getTeamCount(Team team) {
+        int amount = 0;
+        for (Team t : teams.values()) {
+            if (t == team) {
+                amount++;
+            }
+        }
+        return amount;
+    }
+
     // Setters
     public void addPlayer(Player player) {
         players.add(player.getUniqueId());
         player.teleport(spawn);
+
+
+
+        TreeMultimap<Integer, Team> count = TreeMultimap.create();
+        for (Team team : Team.values()) {
+            count.put(getTeamCount(team), team);
+        }
+
+        Team lowest = (Team) count.values().toArray()[0];
+        setTeam(player, lowest);
+        player.sendMessage("§aYou have been put on team " + lowest.getDisplay() + "!");
 
         if (state.equals(GameState.RECRUITING) && players.size() >= ConfigurationManager.getRequiredPlayers()) {
             state = GameState.STARTING;
@@ -95,6 +122,16 @@ public class Arena {
         if (state == GameState.LIVE && players.size() < ConfigurationManager.getRequiredPlayers()) {
             broadcast("§cNot enough players to continue the game! The game has ended.");
             reset(true);
+        }
+    }
+
+    public void setTeam(Player player, Team team) {
+        removeTeam(player);
+        teams.put(player.getUniqueId(), team);
+    }
+    public void removeTeam(Player player) {
+        if (teams.containsKey(player.getUniqueId())) {
+            teams.remove(player.getUniqueId());
         }
     }
 
