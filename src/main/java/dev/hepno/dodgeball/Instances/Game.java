@@ -27,9 +27,9 @@ public class Game {
 
     public void addPoint(Player player) {
         int playerPoints = points.get(player.getUniqueId()) + 1;
-        if (playerPoints == 20) {
+        if (playerPoints == 10) {
             arena.broadcast(player.getName() + " has won the game!");
-            arena.reset();
+            arena.reset(true);
         }
 
         arena.broadcast(player.getName() + " now has " + playerPoints + " points!");

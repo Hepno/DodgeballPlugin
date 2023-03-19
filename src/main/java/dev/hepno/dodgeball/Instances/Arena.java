@@ -43,7 +43,7 @@ public class Arena {
                 Bukkit.getPlayer(uuid).teleport(location);
             }
         }
-
+        broadcastTitle("", "");
         state = GameState.RECRUITING;
         countdown.cancel();
         countdown = new Countdown(plugin, this);
@@ -68,6 +68,7 @@ public class Arena {
 
     public GameState getState() { return state; }
     public List<UUID> getPlayers() { return players; }
+    public Game getGame() { return game; }
 
     // Setters
     public void addPlayer(Player player) {
@@ -83,6 +84,16 @@ public class Arena {
     public void removePlayer(Player player) {
         players.remove(player.getUniqueId());
         player.teleport(ConfigurationManager.getLobbySpawn());
+
+        if (state == GameState.STARTING && players.size() < ConfigurationManager.getRequiredPlayers()) {
+            broadcast("§cNot enough players to start the game!");
+            reset(false);
+        }
+
+        if (state == GameState.LIVE && players.size() < ConfigurationManager.getRequiredPlayers()) {
+            broadcast("§cNot enough players to continue the game! The game has ended.");
+            reset(true);
+        }
     }
 
     public void setState(GameState state) { this.state = state; }

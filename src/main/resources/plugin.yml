@@ -2,3 +2,5 @@ name: Dodgeball
 version: '${project.version}'
 main: dev.hepno.dodgeball.Dodgeball
 api-version: 1.19
+commands:
+  arena:

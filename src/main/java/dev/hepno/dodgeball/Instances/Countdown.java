@@ -33,8 +33,8 @@ public class Countdown extends BukkitRunnable {
 
         if (countdownTime <= 10 || countdownTime % 15 == 0) {
             arena.broadcast(ChatColor.translateAlternateColorCodes('&', "Game starting in " + countdownTime + " seconds!" + (countdownTime == 1 ? "" : "s")));
-
         }
+        arena.broadcastTitle(ChatColor.GREEN.toString() + countdownTime + (countdownTime == 1 ? "" : "s"), "");
 
         countdownTime--;
     }
