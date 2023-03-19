@@ -26,7 +26,7 @@ public class ArenaCommand implements CommandExecutor {
             if (args.length == 1 && args[0].equalsIgnoreCase("list")) {
                 player.sendMessage(ChatColor.GREEN + "List of arenas:");
                 for (Arena arena : plugin.getArenaManager().getArenas()) {
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a- &7Arena " + arena.getId() + "&a(&7" + arena.getState().name() + "&a)"));
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a- &7Arena " + arena.getId() + " &a(&7" + arena.getState().name() + "&a)"));
                 }
             } else if (args.length == 1 && args[0].equalsIgnoreCase("leave")) {
                 Arena arena = plugin.getArenaManager().getArena(player);
