@@ -116,6 +116,7 @@ public class Arena {
     public void removePlayer(Player player) {
         players.remove(player.getUniqueId());
         player.teleport(ConfigurationManager.getLobbySpawn());
+        player.sendTitle("", "");
 
         if (state == GameState.STARTING && players.size() < ConfigurationManager.getRequiredPlayers()) {
             broadcast("§cNot enough players to start the game!");
