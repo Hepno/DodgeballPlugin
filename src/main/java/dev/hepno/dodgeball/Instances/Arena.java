@@ -48,6 +48,7 @@ public class Arena {
             Location location = ConfigurationManager.getLobbySpawn();
             for (UUID uuid : players) {
                 Bukkit.getPlayer(uuid).teleport(location);
+                Bukkit.getPlayer(uuid).setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
             }
             players.clear();
             teams.clear();

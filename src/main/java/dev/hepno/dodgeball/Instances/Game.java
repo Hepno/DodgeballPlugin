@@ -34,10 +34,21 @@ public class Game {
         objective.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&6&lDodgeball"));
 
         Score one = objective.getScore(ChatColor.translateAlternateColorCodes('&', "&e")); one.setScore(5);
-        Score two = objective.getScore(ChatColor.translateAlternateColorCodes('&', "&9Blue Team &7- &f0")); two.setScore(4);
-        Score three = objective.getScore(ChatColor.translateAlternateColorCodes('&', "&cRed Team &7- &f0")); three.setScore(3);
         Score four = objective.getScore(ChatColor.translateAlternateColorCodes('&', "  ")); four.setScore(2);
         Score five = objective.getScore(ChatColor.translateAlternateColorCodes('&', "&ewww.example.com")); five.setScore(1);
+
+        org.bukkit.scoreboard.Team bluePoints = board.registerNewTeam("bluePoints");
+        bluePoints.addEntry(ChatColor.translateAlternateColorCodes('&', "&9"));
+        bluePoints.setSuffix(ChatColor.translateAlternateColorCodes('&', "&f0"));
+        bluePoints.setPrefix(ChatColor.translateAlternateColorCodes('&', "&9Blue Team &7- "));
+
+        org.bukkit.scoreboard.Team redPoints = board.registerNewTeam("redPoints");
+        redPoints.addEntry(ChatColor.translateAlternateColorCodes('&', "&c"));
+        redPoints.setSuffix(ChatColor.translateAlternateColorCodes('&', "&f0"));
+        redPoints.setPrefix(ChatColor.translateAlternateColorCodes('&', "&cRed Team &7- "));
+
+        Score two = objective.getScore(ChatColor.translateAlternateColorCodes('&', "&c")); two.setScore(3);
+        objective.getScore(ChatColor.translateAlternateColorCodes('&', "&9")).setScore(4);
 
 
         // Show scoreboard to all players that are in the arena using a for loop
@@ -59,6 +70,10 @@ public class Game {
 
         arena.broadcast(team.getDisplay() + " now has " + teamPoints + " points!");
         points.replace(team, teamPoints);
+    }
+
+    public int getPoints(Team team) {
+        return points.get(team);
     }
 
 }

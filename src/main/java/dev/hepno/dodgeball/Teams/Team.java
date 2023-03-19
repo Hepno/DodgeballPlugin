@@ -2,6 +2,9 @@ package dev.hepno.dodgeball.Teams;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public enum Team {
 
