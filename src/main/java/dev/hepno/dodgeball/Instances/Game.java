@@ -1,6 +1,8 @@
 package dev.hepno.dodgeball.Instances;
 
 import dev.hepno.dodgeball.GameState;
+import dev.hepno.dodgeball.Teams.Team;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -14,7 +16,7 @@ import java.util.UUID;
 public class Game {
 
     private Arena arena;
-    private HashMap<UUID, Integer> points;
+    private HashMap<Team, Integer> points;
 
     public Game(Arena arena) {
         this.arena = arena;
@@ -43,20 +45,20 @@ public class Game {
             Bukkit.getPlayer(uuid).setScoreboard(board);
         }
 
-        for (UUID uuid : arena.getPlayers()) {
-            points.put(uuid, 0);
-        }
+        // Set points to 0 for both teams
+        points.put(Team.BLUE, 0);
+        points.put(Team.RED, 0);
     }
 
-    public void addPoint(Player player) {
-        int playerPoints = points.get(player.getUniqueId()) + 1;
-        if (playerPoints == 10) {
-            arena.broadcast(player.getName() + " has won the game!");
+    public void addPoint(Team team) {
+        int teamPoints = points.get(team) + 1;
+        if (teamPoints == 10) {
+            arena.broadcast(team.getDisplay() + " has won the game!");
             arena.reset(true);
         }
 
-        arena.broadcast(player.getName() + " now has " + playerPoints + " points!");
-        points.replace(player.getUniqueId(), playerPoints);
+        arena.broadcast(team.getDisplay() + " now has " + teamPoints + " points!");
+        points.replace(team, teamPoints);
     }
 
 }
