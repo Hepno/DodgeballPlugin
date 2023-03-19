@@ -17,7 +17,6 @@ public class ArenaManager {
     public ArenaManager(Dodgeball plugin) {
         FileConfiguration config = plugin.getConfig();
         for (String str : config.getConfigurationSection("arenas.").getKeys(false)) {
-            System.out.println(str);
             arenas.add(new Arena(plugin, Integer.parseInt(str), new Location(
                     Bukkit.getWorld(config.getString("arenas." + str + ".world")),
                     config.getDouble("arenas." + str + ".x"),
