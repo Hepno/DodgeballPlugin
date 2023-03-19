@@ -8,19 +8,19 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 public class Countdown extends BukkitRunnable {
 
-    private Dodgeball dodgeball;
+    private Dodgeball plugin;
     private Arena arena;
     private int countdownTime = 10;
 
-    public Countdown(Dodgeball dodgeball, Arena arena) {
-        this.dodgeball = dodgeball;
+    public Countdown(Dodgeball plugin, Arena arena) {
+        this.plugin = plugin;
         this.arena = arena;
         this.countdownTime = ConfigurationManager.getCountdownTime();
     }
 
     public void start() {
         arena.setState(GameState.STARTING);
-        runTaskTimer(dodgeball, 0, 20);
+        runTaskTimer(plugin, 0, 20);
     }
 
     @Override

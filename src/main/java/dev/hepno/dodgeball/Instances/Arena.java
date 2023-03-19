@@ -26,6 +26,7 @@ public class Arena {
     public Arena(Dodgeball plugin, int id, Location spawn) {
         this.id = id;
         this.spawn = spawn;
+        this.plugin = plugin;
 
         this.state = GameState.RECRUITING;
         this.players = new ArrayList<>();
@@ -36,12 +37,13 @@ public class Arena {
     // Game
     public void start() { game.start(); }
 
-    public void reset(boolean kickplayers) {
-        if (kickplayers) {
+    public void reset(boolean kickPlayers) {
+        if (kickPlayers) {
             Location location = ConfigurationManager.getLobbySpawn();
             for (UUID uuid : players) {
                 Bukkit.getPlayer(uuid).teleport(location);
             }
+            players.clear();
         }
         broadcastTitle("", "");
         state = GameState.RECRUITING;
