@@ -1,0 +1,25 @@
+required-players: 2
+maximum-players: 20
+countdown-time: 10
+lobby-spawn:
+    world: world
+    x: 0.5
+    y: 64.0
+    z: 0.5
+    yaw: 0.0
+    pitch: 0.0
+arenas:
+  arena1:
+    world: world
+    x: 0.5
+    y: 64.0
+    z: 0.5
+    yaw: 0.0
+    pitch: 0.0
+  arena2:
+    world: world
+    x: 0.5
+    y: 64.0
+    z: 0.5
+    yaw: 0.0
+    pitch: 0.0
