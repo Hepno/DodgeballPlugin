@@ -11,7 +11,6 @@ public class ConfigurationManager {
 
     public static void setup(Dodgeball plugin) {
         ConfigurationManager.config = plugin.getConfig();
-        config.options().copyDefaults(true);
         plugin.saveDefaultConfig();
     }
 

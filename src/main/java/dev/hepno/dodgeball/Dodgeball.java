@@ -15,6 +15,7 @@ public final class Dodgeball extends JavaPlugin {
     @Override
     public void onEnable() {
         ConfigurationManager.setup(this);
+        arenaManager = new ArenaManager(this);
         RegisterCommands();
         RegisterEvents();
     }
