@@ -50,6 +50,7 @@ public class Arena {
                 Bukkit.getPlayer(uuid).teleport(location);
             }
             players.clear();
+            teams.clear();
         }
         broadcastTitle("", "");
         state = GameState.RECRUITING;
@@ -77,6 +78,8 @@ public class Arena {
     public GameState getState() { return state; }
     public List<UUID> getPlayers() { return players; }
     public Game getGame() { return game; }
+
+    public Team getTeam(Player player) { return teams.get(player.getUniqueId()); }
 
     public int getTeamCount(Team team) {
         int amount = 0;

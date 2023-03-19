@@ -2,9 +2,11 @@ package dev.hepno.dodgeball;
 
 import dev.hepno.dodgeball.Commands.ArenaCommand;
 import dev.hepno.dodgeball.Events.ConnectListener;
+import dev.hepno.dodgeball.Events.GUIListener;
 import dev.hepno.dodgeball.Events.GameListener;
 import dev.hepno.dodgeball.Managers.ArenaManager;
 import dev.hepno.dodgeball.Managers.ConfigurationManager;
+import dev.hepno.dodgeball.Teams.TeamGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -34,6 +36,7 @@ public final class Dodgeball extends JavaPlugin {
     public void RegisterEvents() {
         Bukkit.getPluginManager().registerEvents(new ConnectListener(this), this);
         Bukkit.getPluginManager().registerEvents(new GameListener(this), this);
+        Bukkit.getPluginManager().registerEvents(new GUIListener(this), this);
     }
 
     // Arena World

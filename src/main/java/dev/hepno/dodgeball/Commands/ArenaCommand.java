@@ -3,6 +3,7 @@ package dev.hepno.dodgeball.Commands;
 import dev.hepno.dodgeball.Dodgeball;
 import dev.hepno.dodgeball.GameState;
 import dev.hepno.dodgeball.Instances.Arena;
+import dev.hepno.dodgeball.Teams.TeamGUI;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -27,6 +28,17 @@ public class ArenaCommand implements CommandExecutor {
                 player.sendMessage(ChatColor.GREEN + "List of arenas:");
                 for (Arena arena : plugin.getArenaManager().getArenas()) {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&a- &7Arena " + arena.getId() + " &a(&7" + arena.getState().name() + "&a)"));
+                }
+            } else if (args.length == 1 && args[0].equalsIgnoreCase("teams")) {
+                Arena arena = plugin.getArenaManager().getArena(player);
+                if (arena != null) {
+                    if (arena.getState() != GameState.LIVE) {
+                        new TeamGUI(arena, player);
+                    } else {
+                        player.sendMessage(ChatColor.RED + "You can't change teams while the game is live!");
+                    }
+                } else {
+                    player.sendMessage(ChatColor.RED + "You are not in an arena!");
                 }
             } else if (args.length == 1 && args[0].equalsIgnoreCase("leave")) {
                 Arena arena = plugin.getArenaManager().getArena(player);
@@ -64,7 +76,7 @@ public class ArenaCommand implements CommandExecutor {
                     return false;
                 }
             } else {
-                player.sendMessage("Usage: /arena <list|join|leave>");
+                player.sendMessage("Usage: /arena <list|join|leave|teams>");
             }
 
 
