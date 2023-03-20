@@ -42,6 +42,7 @@ public class GameListener implements Listener {
         if (arenaManager.getArena(shooter) == null) return;
         Arena arena = arenaManager.getArena(shooter);
         Game game = arena.getGame();
+        FileConfiguration config = plugin.getConfig();
 
         if (event.getEntity().getShooter() instanceof Player && event.getEntity().getType() == EntityType.SNOWBALL) {
             if (event.getHitEntity() != null && event.getHitEntity() instanceof Player && arena.getState() == GameState.LIVE) {
@@ -53,6 +54,7 @@ public class GameListener implements Listener {
 
                 for (UUID uuid : arena.getPlayers()) {
                     Player player = Bukkit.getPlayer(uuid);
+                    if (!(config.getBoolean("scoreboard.enabled"))) { return; }
                     if (arena.getTeam(player) == Team.RED) {
                         player.getScoreboard().getTeam("redPoints").setSuffix(ChatColor.WHITE + " " + arena.getGame().getPoints(Team.RED));
                     } else if (arena.getTeam(player) == Team.BLUE) {

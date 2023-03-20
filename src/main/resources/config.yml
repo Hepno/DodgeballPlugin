@@ -1,6 +1,8 @@
 required-players: 2
 maximum-players: 20
 countdown-time: 10
+use-scoreboard: true
+snowballs-per-player: 3
 database:
   host: localhost
   port: 3306
