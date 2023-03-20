@@ -5,7 +5,9 @@ import dev.hepno.dodgeball.Teams.Team;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
@@ -54,6 +56,7 @@ public class Game {
         // Show scoreboard to all players that are in the arena using a for loop
         for (UUID uuid : arena.getPlayers()) {
             Bukkit.getPlayer(uuid).setScoreboard(board);
+            Bukkit.getPlayer(uuid).getInventory().addItem(new ItemStack(Material.SNOWBALL, 3));
         }
 
         // Set points to 0 for both teams
