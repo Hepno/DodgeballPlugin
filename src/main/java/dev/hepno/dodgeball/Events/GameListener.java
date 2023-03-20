@@ -5,6 +5,9 @@ import dev.hepno.dodgeball.GameState;
 import dev.hepno.dodgeball.Instances.Arena;
 import dev.hepno.dodgeball.Instances.Game;
 import dev.hepno.dodgeball.Managers.ArenaManager;
+import dev.hepno.dodgeball.Teams.Team;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -12,6 +15,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.UUID;
 
 public class GameListener implements Listener {
 
@@ -33,6 +38,15 @@ public class GameListener implements Listener {
         if (event.getEntity().getShooter() instanceof Player && event.getEntity().getType() == EntityType.SNOWBALL) {
                 if (event.getHitEntity() != null && event.getHitEntity() instanceof Player && arena.getState() == GameState.LIVE) {
                     game.addPoint(arena.getTeam(shooter));
+
+                    for (UUID uuid : arena.getPlayers()) {
+                        Player player = Bukkit.getPlayer(uuid);
+                        if (arena.getTeam(player) == Team.RED) {
+                            player.getScoreboard().getTeam("redPoints").setSuffix(ChatColor.WHITE + " " + arena.getGame().getPoints(Team.RED));
+                        } else if (arena.getTeam(player) == Team.BLUE) {
+                            player.getScoreboard().getTeam("bluePoints").setSuffix(ChatColor.WHITE + " " + arena.getGame().getPoints(Team.BLUE));
+                        }
+                    }
             }
 
             if (event.getHitBlock() != null && arena.getState() == GameState.LIVE) {
