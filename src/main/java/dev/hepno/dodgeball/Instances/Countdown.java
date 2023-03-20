@@ -38,10 +38,6 @@ public class Countdown extends BukkitRunnable {
             }
             return;
         }
-
-        if (countdownTime <= 10 || countdownTime % 15 == 0) {
-            arena.broadcast(ChatColor.translateAlternateColorCodes('&', "Game starting in " + countdownTime + " second" + (countdownTime == 1 ? "" : "s" + "!")));
-        }
         if (countdownTime <= 3) {
             for (UUID uuid : arena.getPlayers()) {
                 Bukkit.getPlayer(uuid).playSound(Bukkit.getPlayer(uuid).getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
