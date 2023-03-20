@@ -13,12 +13,10 @@ arenas:
     line-corner-1:
       world: world
       x: 0.5
-      y: 64.0
       z: 0.5
     line-corner-2:
       world: world
       x: 0.5
-      y: 64.0
       z: 0.5
     red-spawn:
       world: world
@@ -38,12 +36,10 @@ arenas:
     line-corner-1:
       world: world
       x: 0.5
-      y: 64.0
       z: 0.5
     line-corner-2:
       world: world
       x: 0.5
-      y: 64.0
       z: 0.5
     red-spawn:
       world: world

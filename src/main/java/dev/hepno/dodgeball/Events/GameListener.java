@@ -6,6 +6,8 @@ import dev.hepno.dodgeball.Instances.Arena;
 import dev.hepno.dodgeball.Instances.Game;
 import dev.hepno.dodgeball.Managers.ArenaManager;
 import dev.hepno.dodgeball.Teams.Team;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.EntityType;
@@ -17,6 +19,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.BoundingBox;
 
 import java.util.UUID;
 
@@ -81,7 +84,20 @@ public class GameListener implements Listener {
         if (plugin.getArenaManager().getArena(event.getPlayer()) == null) return;
         Arena arena = plugin.getArenaManager().getArena(event.getPlayer());
 
-        // Make it so that if players cross the corners set in the config, the event is cancelled
+        BoundingBox redLine = BoundingBox.of(new Location(world, config.getDouble("arenas." + arena.getId()
+                + ".line-corner-1.x"), 0, config.getDouble("arenas." + arena.getId() + ".line-corner-1.z")),
+                new Location(world, config.getDouble("arenas." + arena.getId() + ".line-corner-2.x"), 319,
+                config.getDouble("arenas." + arena.getId() + ".line-corner-2.z")));
+
+        // Make it so that if players enter the bounding box, the event is cancelled
+        if (redLine.contains(event.getTo().toVector())) {
+            event.setCancelled(true);
+            // send action bar message
+            event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new ComponentBuilder(
+                    "You can't cross the middle line!").create());
+
+
+        }
 
     }
 }
