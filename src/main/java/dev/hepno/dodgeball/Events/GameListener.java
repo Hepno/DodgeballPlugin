@@ -58,7 +58,6 @@ public class GameListener implements Listener {
             }
 
             if (event.getHitBlock() != null && arena.getState() == GameState.LIVE) {
-                ((Player) event.getEntity().getShooter()).getInventory().removeItem(new ItemStack(Material.SNOWBALL, 1));
                 event.getHitBlock().getLocation().getWorld().dropItem(event.getHitBlock().getLocation(), new ItemStack(Material.SNOWBALL));
             }
         }
