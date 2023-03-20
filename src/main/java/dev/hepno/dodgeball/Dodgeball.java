@@ -7,13 +7,17 @@ import dev.hepno.dodgeball.Events.GUIListener;
 import dev.hepno.dodgeball.Events.GameListener;
 import dev.hepno.dodgeball.Managers.ArenaManager;
 import dev.hepno.dodgeball.Managers.ConfigurationManager;
+import dev.hepno.dodgeball.Managers.DatabaseManager;
 import dev.hepno.dodgeball.Teams.TeamGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.SQLException;
+
 public final class Dodgeball extends JavaPlugin {
 
     private ArenaManager arenaManager;
+    private DatabaseManager databaseManager;
 
     @Override
     public void onEnable() {
@@ -21,11 +25,23 @@ public final class Dodgeball extends JavaPlugin {
         arenaManager = new ArenaManager(this);
         RegisterCommands();
         RegisterEvents();
+
+        // Database
+        databaseManager = new DatabaseManager();
+        try {
+            databaseManager.connect();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        try {
+            databaseManager.disconnect();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public ArenaManager getArenaManager() { return arenaManager; }
