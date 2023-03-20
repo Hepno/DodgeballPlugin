@@ -34,7 +34,7 @@ public class Countdown extends BukkitRunnable {
             arena.start();
             arena.broadcastTitle("", "");
             for (UUID uuid : arena.getPlayers()) {
-                Bukkit.getPlayer(uuid).playSound(Bukkit.getPlayer(uuid).getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+                Bukkit.getPlayer(uuid).playSound(Bukkit.getPlayer(uuid).getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 2, 2);
             }
             return;
         }
