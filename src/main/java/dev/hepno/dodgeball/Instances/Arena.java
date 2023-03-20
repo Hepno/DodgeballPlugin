@@ -167,12 +167,10 @@ public class Arena {
 
         try {
             databaseManager.connect();
-            System.out.println(databaseManager.getConnection());
             PreparedStatement statement = databaseManager.getConnection().prepareStatement("SELECT * FROM `dodgeball` WHERE `uuid` = ?");
             statement.setString(1, player.getUniqueId().toString());
             ResultSet resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                System.out.println(resultSet.getString("inventory"));
                 inventory = BukkitSerialization.fromBase64(resultSet.getString("inventory"));
 
                 for (int i = 0; i < inventory.getSize(); i++) {
