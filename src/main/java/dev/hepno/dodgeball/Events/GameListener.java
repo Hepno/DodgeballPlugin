@@ -23,22 +23,23 @@ public class GameListener implements Listener {
 
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
+        if (plugin.getArenaManager().getArena(event.getPlayer()) == null) {
+            return;
+        }
         Arena arena = plugin.getArenaManager().getArena(event.getPlayer());
         Team playerTeam = arena.getTeam(event.getPlayer());
-        if (arena != null) {
-            if (arena.getState() == GameState.LIVE) {
-                arena.getGame().addPoint(playerTeam);
-                for (UUID uuid : arena.getPlayers()) {
-                    Player player = Bukkit.getPlayer(uuid);
+        if (arena.getState() == GameState.LIVE) {
+            arena.getGame().addPoint(playerTeam);
+            for (UUID uuid : arena.getPlayers()) {
+                Player player = Bukkit.getPlayer(uuid);
 
-                    // set players scoreboard to show the new score for red and blue, and check which team to update
-                    if (arena.getTeam(event.getPlayer()) == Team.RED) {
-                        player.getScoreboard().getTeam("redPoints").setSuffix(ChatColor.WHITE + " " + arena.getGame().getPoints(Team.RED));
-                    } else if (arena.getTeam(event.getPlayer()) == Team.BLUE) {
-                        player.getScoreboard().getTeam("bluePoints").setSuffix(ChatColor.WHITE + " " + arena.getGame().getPoints(Team.BLUE));
-                    }
-
+                // set players scoreboard to show the new score for red and blue, and check which team to update
+                if (arena.getTeam(event.getPlayer()) == Team.RED) {
+                    player.getScoreboard().getTeam("redPoints").setSuffix(ChatColor.WHITE + " " + arena.getGame().getPoints(Team.RED));
+                } else if (arena.getTeam(event.getPlayer()) == Team.BLUE) {
+                    player.getScoreboard().getTeam("bluePoints").setSuffix(ChatColor.WHITE + " " + arena.getGame().getPoints(Team.BLUE));
                 }
+
             }
         }
 
