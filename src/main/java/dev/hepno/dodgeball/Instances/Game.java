@@ -70,14 +70,18 @@ public class Game {
                         Bukkit.getWorld(config.getString("arenas." + arena.getId() + ".blue-spawn.world")),
                         config.getDouble("arenas." + arena.getId() + ".blue-spawn.x"),
                         config.getDouble("arenas." + arena.getId() + ".blue-spawn.y"),
-                        config.getDouble("arenas." + arena.getId() + ".blue-spawn.z")
+                        config.getDouble("arenas." + arena.getId() + ".blue-spawn.z"),
+                        (float) config.getDouble("arenas." + arena.getId() + ".blue-spawn.yaw"),
+                        (float) config.getDouble("arenas." + arena.getId() + ".blue-spawn.pitch")
                 ));
             } else {
                 Bukkit.getPlayer(uuid).teleport(new Location(
                         Bukkit.getWorld(config.getString("arenas." + arena.getId() + ".red-spawn.world")),
                         config.getDouble("arenas." + arena.getId() + ".red-spawn.x"),
                         config.getDouble("arenas." + arena.getId() + ".red-spawn.y"),
-                        config.getDouble("arenas." + arena.getId() + ".red-spawn.z")
+                        config.getDouble("arenas." + arena.getId() + ".red-spawn.z"),
+                        (float) config.getDouble("arenas." + arena.getId() + ".red-spawn.yaw"),
+                        (float) config.getDouble("arenas." + arena.getId() + ".red-spawn.pitch")
                 ));
             }
         }

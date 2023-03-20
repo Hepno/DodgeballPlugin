@@ -86,6 +86,7 @@ public class GameListener implements Listener {
         FileConfiguration config = plugin.getConfig();
         if (plugin.getArenaManager().getArena(event.getPlayer()) == null) return;
         Arena arena = plugin.getArenaManager().getArena(event.getPlayer());
+        if (arena.getState() != GameState.LIVE) return;
 
         BoundingBox redLine = BoundingBox.of(new Location(world, config.getDouble("arenas." + arena.getId()
                 + ".line-corner-1.x"), 0, config.getDouble("arenas." + arena.getId() + ".line-corner-1.z")),
