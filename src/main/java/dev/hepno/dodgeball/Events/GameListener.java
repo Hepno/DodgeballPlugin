@@ -32,7 +32,7 @@ public class GameListener implements Listener {
 
         if (event.getEntity().getShooter() instanceof Player && event.getEntity().getType() == EntityType.SNOWBALL) {
                 if (event.getHitEntity() != null && event.getHitEntity() instanceof Player && arena.getState() == GameState.LIVE) {
-                    game.addPoint(arena.getTeam(hitPlayer));
+                    game.addPoint(arena.getTeam(shooter));
             }
 
             if (event.getHitBlock() != null && arena.getState() == GameState.LIVE) {
