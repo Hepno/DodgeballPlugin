@@ -1,11 +1,15 @@
 package dev.hepno.dodgeball.Instances;
 
+import dev.hepno.dodgeball.Dodgeball;
 import dev.hepno.dodgeball.GameState;
+import dev.hepno.dodgeball.Managers.ConfigurationManager;
 import dev.hepno.dodgeball.Teams.Team;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Objective;
@@ -53,10 +57,29 @@ public class Game {
         objective.getScore(ChatColor.translateAlternateColorCodes('&', "&9")).setScore(4);
 
 
-        // Show scoreboard to all players that are in the arena using a for loop
+        // Show scoreboard to & teleport all players that are in the arena using a for loop
+        Dodgeball plugin = arena.getPlugin();
+        ConfigurationManager.setup(plugin);
+        FileConfiguration config = plugin.getConfig();
+
         for (UUID uuid : arena.getPlayers()) {
             Bukkit.getPlayer(uuid).setScoreboard(board);
             Bukkit.getPlayer(uuid).getInventory().addItem(new ItemStack(Material.SNOWBALL, 3));
+            if (arena.getTeam(Bukkit.getPlayer(uuid)) == Team.BLUE) {
+                Bukkit.getPlayer(uuid).teleport(new Location(
+                        Bukkit.getWorld(config.getString("arenas." + arena.getId() + ".blue-spawn.world")),
+                        config.getDouble("arenas." + arena.getId() + ".blue-spawn.x"),
+                        config.getDouble("arenas." + arena.getId() + ".blue-spawn.y"),
+                        config.getDouble("arenas." + arena.getId() + ".blue-spawn.z")
+                ));
+            } else {
+                Bukkit.getPlayer(uuid).teleport(new Location(
+                        Bukkit.getWorld(config.getString("arenas." + arena.getId() + ".red-spawn.world")),
+                        config.getDouble("arenas." + arena.getId() + ".red-spawn.x"),
+                        config.getDouble("arenas." + arena.getId() + ".red-spawn.y"),
+                        config.getDouble("arenas." + arena.getId() + ".red-spawn.z")
+                ));
+            }
         }
 
         // Set points to 0 for both teams

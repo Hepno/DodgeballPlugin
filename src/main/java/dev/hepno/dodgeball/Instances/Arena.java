@@ -11,6 +11,7 @@ import dev.hepno.dodgeball.Teams.Team;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
@@ -105,6 +106,7 @@ public class Arena {
     }
 
     // Getters
+    public Dodgeball getPlugin() { return plugin; }
     public int getId() { return id; }
 
     public GameState getState() { return state; }
@@ -135,8 +137,15 @@ public class Arena {
         Team lowest = (Team) count.values().toArray()[0];
         setTeam(player, lowest);
         player.sendMessage("§aYou have been put on team " + lowest.getDisplay() + "!");
+        ConfigurationManager.setup(plugin);
+        FileConfiguration config = plugin.getConfig();
 
-        player.teleport(lowest == Team.RED ? redSpawn : blueSpawn);
+        player.teleport(new Location(Bukkit.getWorld(config.getString("arenas." + getId() + ".waiting_room-spawn.world")),
+                config.getDouble("arenas." + getId() + ".waiting_room-spawn.x"),
+                config.getDouble("arenas." + getId() + ".waiting_room-spawn.y"),
+                config.getDouble("arenas." + getId() + ".waiting_room-spawn.z"),
+                (float) config.getInt("arenas." + getId() + ".waiting_room-spawn.yaw"),
+                (float) config.getInt("arenas." + getId() + ".waiting_room-spawn.pitch")));
 
         if (state.equals(GameState.RECRUITING) && players.size() >= ConfigurationManager.getRequiredPlayers()) {
             // ensure that not every player is on the same team
