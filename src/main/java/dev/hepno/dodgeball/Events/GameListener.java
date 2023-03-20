@@ -26,6 +26,7 @@ public class GameListener implements Listener {
         Player hitPlayer = (Player) event.getHitEntity();
         Player shooter = (Player) event.getEntity().getShooter();
         ArenaManager arenaManager = plugin.getArenaManager();
+        if (arenaManager.getArena(shooter) == null) return;
         Arena arena = arenaManager.getArena(shooter);
         Game game = arena.getGame();
 
