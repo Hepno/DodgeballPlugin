@@ -94,7 +94,7 @@ public class GameListener implements Listener {
             event.setCancelled(true);
             // send action bar message
             event.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, new ComponentBuilder(
-                    "You can't cross the middle line!").create());
+                    ChatColor.RED + "You can't cross the middle line!").create());
 
 
         }
