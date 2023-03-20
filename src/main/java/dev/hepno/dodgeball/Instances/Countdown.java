@@ -3,8 +3,12 @@ package dev.hepno.dodgeball.Instances;
 import dev.hepno.dodgeball.Dodgeball;
 import dev.hepno.dodgeball.GameState;
 import dev.hepno.dodgeball.Managers.ConfigurationManager;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.UUID;
 
 public class Countdown extends BukkitRunnable {
 
@@ -29,11 +33,19 @@ public class Countdown extends BukkitRunnable {
             cancel();
             arena.start();
             arena.broadcastTitle("", "");
+            for (UUID uuid : arena.getPlayers()) {
+                Bukkit.getPlayer(uuid).playSound(Bukkit.getPlayer(uuid).getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+            }
             return;
         }
 
         if (countdownTime <= 10 || countdownTime % 15 == 0) {
             arena.broadcast(ChatColor.translateAlternateColorCodes('&', "Game starting in " + countdownTime + " second" + (countdownTime == 1 ? "" : "s" + "!")));
+        }
+        if (countdownTime <= 3) {
+            for (UUID uuid : arena.getPlayers()) {
+                Bukkit.getPlayer(uuid).playSound(Bukkit.getPlayer(uuid).getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
+            }
         }
         arena.broadcastTitle(ChatColor.GREEN.toString() + countdownTime, "");
 
