@@ -14,7 +14,10 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -99,5 +102,37 @@ public class GameListener implements Listener {
 
         }
 
+    }
+
+    @EventHandler
+    public void onHunger(FoodLevelChangeEvent event) {
+        if (event.getEntity() instanceof Player) {
+            ArenaManager arenaManager = plugin.getArenaManager();
+            if (arenaManager.getArena((Player) event.getEntity()) == null) return;
+            Arena arena = arenaManager.getArena((Player) event.getEntity());
+            if (arena.getPlayers().contains(event.getEntity().getUniqueId())) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @EventHandler
+    public void onBreak(BlockBreakEvent event) {
+        if (plugin.getArenaManager().getArena(event.getPlayer()) == null) return;
+
+        Arena arena = plugin.getArenaManager().getArena(event.getPlayer());
+        if (arena.getPlayers().contains(event.getPlayer().getUniqueId())) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlace(BlockPlaceEvent event) {
+        if (plugin.getArenaManager().getArena(event.getPlayer()) == null) return;
+
+        Arena arena = plugin.getArenaManager().getArena(event.getPlayer());
+        if (arena.getPlayers().contains(event.getPlayer().getUniqueId())) {
+            event.setCancelled(true);
+        }
     }
 }
