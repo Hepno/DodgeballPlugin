@@ -1,6 +1,7 @@
 package dev.hepno.dodgeball;
 
 import dev.hepno.dodgeball.Commands.ArenaCommand;
+import dev.hepno.dodgeball.Commands.ArenaForceStart;
 import dev.hepno.dodgeball.Events.ConnectListener;
 import dev.hepno.dodgeball.Events.GUIListener;
 import dev.hepno.dodgeball.Events.GameListener;
@@ -31,6 +32,7 @@ public final class Dodgeball extends JavaPlugin {
 
     public void RegisterCommands() {
         getCommand("arena").setExecutor(new ArenaCommand(this));
+        getCommand("arenaforcestart").setExecutor(new ArenaForceStart(this));
     }
 
     public void RegisterEvents() {
