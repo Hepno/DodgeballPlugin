@@ -1,17 +1,16 @@
 package dev.hepno.dodgeball.Events;
 
 import dev.hepno.dodgeball.Dodgeball;
-import dev.hepno.dodgeball.GameState;
 import dev.hepno.dodgeball.Instances.Arena;
-import dev.hepno.dodgeball.Teams.Team;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import dev.hepno.dodgeball.Instances.Game;
+import dev.hepno.dodgeball.Managers.ArenaManager;
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-
-import java.util.UUID;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.inventory.ItemStack;
 
 public class GameListener implements Listener {
 
@@ -22,27 +21,36 @@ public class GameListener implements Listener {
     }
 
     @EventHandler
-    public void onBlockBreak(BlockBreakEvent event) {
-        if (plugin.getArenaManager().getArena(event.getPlayer()) == null) {
-            return;
-        }
-        Arena arena = plugin.getArenaManager().getArena(event.getPlayer());
-        Team playerTeam = arena.getTeam(event.getPlayer());
-        if (arena.getState() == GameState.LIVE) {
-            arena.getGame().addPoint(playerTeam);
-            for (UUID uuid : arena.getPlayers()) {
-                Player player = Bukkit.getPlayer(uuid);
+    public void onSnowballHit(ProjectileHitEvent event) {
+        if (event.getEntity().getShooter() instanceof Player && event.getEntity().getType() == EntityType.SNOWBALL) {
+            if (event.getHitEntity() != null) {
+                if (event.getHitEntity() instanceof Player) {
+                    Player hitPlayer = (Player) event.getHitEntity();
+                    Player shooter = (Player) event.getEntity().getShooter();
+                    ArenaManager arenaManager = plugin.getArenaManager();
+                    Arena arena = arenaManager.getArena(shooter);
+                    Game game = arena.getGame();
 
-                // set players scoreboard to show the new score for red and blue, and check which team to update
+                    game.addPoint(arena.getTeam(hitPlayer));
+                }
+            }
+
+            if (event.getHitBlock() != null) {
+                ((Player) event.getEntity().getShooter()).getInventory().removeItem(new ItemStack(Material.SNOWBALL, 1));
+                event.getHitBlock().getLocation().getWorld().dropItem(event.getHitBlock().getLocation(), new ItemStack(Material.SNOWBALL));
+            }
+        }
+    }
+
+}
+
+                /*
+                            for (UUID uuid : arena.getPlayers()) {
+                Player player = Bukkit.getPlayer(uuid);
+            }
                 if (arena.getTeam(event.getPlayer()) == Team.RED) {
                     player.getScoreboard().getTeam("redPoints").setSuffix(ChatColor.WHITE + " " + arena.getGame().getPoints(Team.RED));
                 } else if (arena.getTeam(event.getPlayer()) == Team.BLUE) {
                     player.getScoreboard().getTeam("bluePoints").setSuffix(ChatColor.WHITE + " " + arena.getGame().getPoints(Team.BLUE));
                 }
-
-            }
-        }
-
-    }
-
-}
+                */
