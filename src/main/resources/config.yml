@@ -1,6 +1,12 @@
 required-players: 2
 maximum-players: 20
 countdown-time: 10
+database:
+  host: localhost
+  port: 3306
+  database: minecraft
+  username: root
+  password: password
 lobby-spawn:
     world: world
     x: 0.5
