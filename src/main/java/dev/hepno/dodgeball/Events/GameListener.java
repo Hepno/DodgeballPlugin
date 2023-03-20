@@ -1,6 +1,7 @@
 package dev.hepno.dodgeball.Events;
 
 import dev.hepno.dodgeball.Dodgeball;
+import dev.hepno.dodgeball.GameState;
 import dev.hepno.dodgeball.Instances.Arena;
 import dev.hepno.dodgeball.Instances.Game;
 import dev.hepno.dodgeball.Managers.ArenaManager;
@@ -22,20 +23,18 @@ public class GameListener implements Listener {
 
     @EventHandler
     public void onSnowballHit(ProjectileHitEvent event) {
-        if (event.getEntity().getShooter() instanceof Player && event.getEntity().getType() == EntityType.SNOWBALL) {
-            if (event.getHitEntity() != null) {
-                if (event.getHitEntity() instanceof Player) {
-                    Player hitPlayer = (Player) event.getHitEntity();
-                    Player shooter = (Player) event.getEntity().getShooter();
-                    ArenaManager arenaManager = plugin.getArenaManager();
-                    Arena arena = arenaManager.getArena(shooter);
-                    Game game = arena.getGame();
+        Player hitPlayer = (Player) event.getHitEntity();
+        Player shooter = (Player) event.getEntity().getShooter();
+        ArenaManager arenaManager = plugin.getArenaManager();
+        Arena arena = arenaManager.getArena(shooter);
+        Game game = arena.getGame();
 
+        if (event.getEntity().getShooter() instanceof Player && event.getEntity().getType() == EntityType.SNOWBALL) {
+                if (event.getHitEntity() != null && event.getHitEntity() instanceof Player && arena.getState() == GameState.LIVE) {
                     game.addPoint(arena.getTeam(hitPlayer));
-                }
             }
 
-            if (event.getHitBlock() != null) {
+            if (event.getHitBlock() != null && arena.getState() == GameState.LIVE) {
                 ((Player) event.getEntity().getShooter()).getInventory().removeItem(new ItemStack(Material.SNOWBALL, 1));
                 event.getHitBlock().getLocation().getWorld().dropItem(event.getHitBlock().getLocation(), new ItemStack(Material.SNOWBALL));
             }
