@@ -25,7 +25,7 @@ public class ArenaForceStart implements CommandExecutor {
         if (plugin.getArenaManager().getArena(player) == null) { return false; }
         Arena arena = plugin.getArenaManager().getArena(player);
 
-        arena.setState(GameState.LIVE);
+        arena.start();
 
         return false;
     }
