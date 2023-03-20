@@ -20,7 +20,8 @@ public class Arena {
     private Dodgeball plugin;
 
     private int id;
-    private Location spawn;
+    private Location redSpawn;
+    private Location blueSpawn;
 
     private GameState state;
     private List<UUID> players;
@@ -28,9 +29,10 @@ public class Arena {
     private Countdown countdown;
     private Game game;
 
-    public Arena(Dodgeball plugin, int id, Location spawn) {
+    public Arena(Dodgeball plugin, int id, Location redSpawn, Location blueSpawn) {
         this.id = id;
-        this.spawn = spawn;
+        this.redSpawn = redSpawn;
+        this.blueSpawn = blueSpawn;
         this.plugin = plugin;
 
         this.state = GameState.RECRUITING;
@@ -95,9 +97,6 @@ public class Arena {
     // Setters
     public void addPlayer(Player player) {
         players.add(player.getUniqueId());
-        player.teleport(spawn);
-
-
 
         TreeMultimap<Integer, Team> count = TreeMultimap.create();
         for (Team team : Team.values()) {
@@ -108,9 +107,14 @@ public class Arena {
         setTeam(player, lowest);
         player.sendMessage("§aYou have been put on team " + lowest.getDisplay() + "!");
 
+        player.teleport(lowest == Team.RED ? redSpawn : blueSpawn);
+
         if (state.equals(GameState.RECRUITING) && players.size() >= ConfigurationManager.getRequiredPlayers()) {
-            state = GameState.STARTING;
-            countdown.start();
+            // ensure that not every player is on the same team
+            if (getTeamCount(Team.RED) > 0 || getTeamCount(Team.BLUE) > 0) {
+                state = GameState.STARTING;
+                countdown.start();
+            }
         }
     }
 

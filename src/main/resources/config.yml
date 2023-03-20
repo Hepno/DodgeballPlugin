@@ -10,16 +10,52 @@ lobby-spawn:
     pitch: 0.0
 arenas:
   0:
-    world: world
-    x: 0.5
-    y: 64.0
-    z: 0.5
-    yaw: 0.0
-    pitch: 0.0
+    line-corner-1:
+      world: world
+      x: 0.5
+      y: 64.0
+      z: 0.5
+    line-corner-2:
+      world: world
+      x: 0.5
+      y: 64.0
+      z: 0.5
+    red-spawn:
+      world: world
+      x: 0.5
+      y: 64.0
+      z: 0.5
+      yaw: 0.0
+      pitch: 0.0
+    blue-spawn:
+        world: world
+        x: 0.5
+        y: 64.0
+        z: 0.5
+        yaw: 0.0
+        pitch: 0.0
   1:
-    world: world
-    x: 0.5
-    y: 64.0
-    z: 0.5
-    yaw: 0.0
-    pitch: 0.0
+    line-corner-1:
+      world: world
+      x: 0.5
+      y: 64.0
+      z: 0.5
+    line-corner-2:
+      world: world
+      x: 0.5
+      y: 64.0
+      z: 0.5
+    red-spawn:
+      world: world
+      x: 0.5
+      y: 64.0
+      z: 0.5
+      yaw: 0.0
+      pitch: 0.0
+    blue-spawn:
+      world: world
+      x: 0.5
+      y: 64.0
+      z: 0.5
+      yaw: 0.0
+      pitch: 0.0

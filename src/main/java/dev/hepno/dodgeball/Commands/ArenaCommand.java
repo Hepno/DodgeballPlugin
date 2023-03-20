@@ -33,14 +33,18 @@ public class ArenaCommand implements CommandExecutor {
                 Arena arena = plugin.getArenaManager().getArena(player);
                 if (arena != null) {
                     if (arena.getState() != GameState.LIVE) {
+                        if (arena.getTeamCount(arena.getTeam(player)) == 1) {
+                            player.sendMessage(ChatColor.RED + "You can't change teams while you are the only one in your team!");
+                            return false;
+                        }
+                        }
                         new TeamGUI(arena, player);
                     } else {
                         player.sendMessage(ChatColor.RED + "You can't change teams while the game is live!");
                     }
                 } else {
                     player.sendMessage(ChatColor.RED + "You are not in an arena!");
-                }
-            } else if (args.length == 1 && args[0].equalsIgnoreCase("leave")) {
+            } if (args.length == 1 && args[0].equalsIgnoreCase("leave")) {
                 Arena arena = plugin.getArenaManager().getArena(player);
                 if (arena != null) {
                     arena.removePlayer(player);

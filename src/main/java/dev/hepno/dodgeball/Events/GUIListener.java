@@ -2,8 +2,10 @@ package dev.hepno.dodgeball.Events;
 
 import dev.hepno.dodgeball.Dodgeball;
 import dev.hepno.dodgeball.Instances.Arena;
+import dev.hepno.dodgeball.Managers.ConfigurationManager;
 import dev.hepno.dodgeball.Teams.Team;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,6 +35,14 @@ public class GUIListener implements Listener {
                 } else {
                     player.sendMessage("You have joined the " + team.getDisplay() + " team!");
                     arena.setTeam(player, team);
+                    FileConfiguration config = plugin.getConfig();
+                    player.teleport(new org.bukkit.Location(
+                            player.getWorld(),
+                            config.getDouble("arenas." + arena.getId() + "." + team.name().toLowerCase() + "-spawn.x"),
+                            config.getDouble("arenas." + arena.getId() + "." + team.name().toLowerCase() + "-spawn.y"),
+                            config.getDouble("arenas." + arena.getId() + "." + team.name().toLowerCase() + "-spawn.z"),
+                            (float) config.getDouble("arenas." + arena.getId() + "." + team.name().toLowerCase() + "-spawn.yaw"),
+                            (float) config.getDouble("arenas." + arena.getId() + "." + team.name().toLowerCase() + "-spawn.pitch")));
                 }
             }
             player.closeInventory();

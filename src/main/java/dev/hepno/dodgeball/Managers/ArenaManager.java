@@ -18,12 +18,19 @@ public class ArenaManager {
         FileConfiguration config = plugin.getConfig();
         for (String str : config.getConfigurationSection("arenas.").getKeys(false)) {
             arenas.add(new Arena(plugin, Integer.parseInt(str), new Location(
-                    Bukkit.getWorld(config.getString("arenas." + str + ".world")),
-                    config.getDouble("arenas." + str + ".x"),
-                    config.getDouble("arenas." + str + ".y"),
-                    config.getDouble("arenas." + str + ".z"),
-                    (float) config.getDouble("arenas." + str + ".yaw"),
-                    (float) config.getDouble("arenas." + str + ".pitch"))));
+                    Bukkit.getWorld(config.getString("arenas." + str + ".red-spawn.world")),
+                    config.getDouble("arenas." + str + ".red-spawn.x"),
+                    config.getDouble("arenas." + str + ".red-spawn.y"),
+                    config.getDouble("arenas." + str + ".red-spawn.z"),
+                    (float) config.getDouble("arenas." + str + ".red-spawn.yaw"),
+                    (float) config.getDouble("arenas." + str + ".red-spawn.pitch"))
+            , new Location(
+                    Bukkit.getWorld(config.getString("arenas." + str + ".blue-spawn.world")),
+                    config.getDouble("arenas." + str + ".blue-spawn.x"),
+                    config.getDouble("arenas." + str + ".blue-spawn.y"),
+                    config.getDouble("arenas." + str + ".blue-spawn.z"),
+                    (float) config.getDouble("arenas." + str + ".blue-spawn.yaw"),
+                    (float) config.getDouble("arenas." + str + ".blue-spawn.pitch"))));
         }
     }
 
