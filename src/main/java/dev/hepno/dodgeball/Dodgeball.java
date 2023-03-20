@@ -38,6 +38,7 @@ public final class Dodgeball extends JavaPlugin {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        System.out.println(databaseManager.getConnection());
     }
 
     @Override

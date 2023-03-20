@@ -1,15 +1,22 @@
 package dev.hepno.dodgeball.Instances;
 
 import com.google.common.collect.TreeMultimap;
+import dev.hepno.dodgeball.BukkitSerialization;
 import dev.hepno.dodgeball.Dodgeball;
 import dev.hepno.dodgeball.GameState;
 import dev.hepno.dodgeball.Managers.ConfigurationManager;
+import dev.hepno.dodgeball.Managers.DatabaseManager;
 import dev.hepno.dodgeball.Teams.Team;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
+import java.io.IOException;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +35,8 @@ public class Arena {
     private HashMap<UUID, Team> teams;
     private Countdown countdown;
     private Game game;
+
+    private DatabaseManager databaseManager;
 
     public Arena(Dodgeball plugin, int id, Location redSpawn, Location blueSpawn) {
         this.id = id;
@@ -116,6 +125,25 @@ public class Arena {
                 countdown.start();
             }
         }
+
+        // Encode players inventory into base64 and store it in the database for later use, then clear the inventory
+        databaseManager = new DatabaseManager();
+
+        try {
+            databaseManager.connect();
+            PreparedStatement statement = databaseManager.getConnection().prepareStatement(
+                    "INSERT INTO `dodgeball` (`uuid`, `inventory`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `inventory` = ?");
+            Inventory inventory = Bukkit.createInventory(null, 45);
+            inventory.setContents(player.getInventory().getContents());
+            statement.setString(1, player.getUniqueId().toString());
+            statement.setString(2, BukkitSerialization.toBase64(inventory));
+            statement.setString(3, BukkitSerialization.toBase64(inventory));
+            statement.executeUpdate();
+            player.getInventory().clear();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public void removePlayer(Player player) {
@@ -131,6 +159,28 @@ public class Arena {
         if (state == GameState.LIVE && players.size() < ConfigurationManager.getRequiredPlayers()) {
             broadcast("§cNot enough players to continue the game! The game has ended.");
             reset(true);
+        }
+
+        // Restore the players inventory from the database
+        databaseManager = new DatabaseManager();
+        Inventory inventory = null;
+
+        try {
+            databaseManager.connect();
+            System.out.println(databaseManager.getConnection());
+            PreparedStatement statement = databaseManager.getConnection().prepareStatement("SELECT * FROM `dodgeball` WHERE `uuid` = ?");
+            statement.setString(1, player.getUniqueId().toString());
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                System.out.println(resultSet.getString("inventory"));
+                inventory = BukkitSerialization.fromBase64(resultSet.getString("inventory"));
+
+                for (int i = 0; i < inventory.getSize(); i++) {
+                    player.getInventory().setItem(i, inventory.getItem(i));
+                }
+            }
+        } catch (SQLException | IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

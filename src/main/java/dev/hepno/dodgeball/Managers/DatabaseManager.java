@@ -6,11 +6,11 @@ import java.sql.SQLException;
 
 public class DatabaseManager {
 
-    private final String HOST = "eu02-sql.pebblehost.com";
+    private final String HOST = "172.18.0.1";
     private final int PORT = 3306;
-    private final String DATABASE = "customer_460243_emailverify";
-    private final String USERNAME = "customer_460243_emailverify";
-    private final String PASSWORD = "bU@TWJf4uWX0Ue5bYsE2";
+    private final String DATABASE = "s5_rer";
+    private final String USERNAME = "u5_FVX2O15bxQ";
+    private final String PASSWORD = "BrVw0m@e^CLYN88!K!yLwK8t";
 
     private Connection connection;
 
