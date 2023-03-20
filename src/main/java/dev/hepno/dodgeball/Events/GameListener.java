@@ -46,6 +46,7 @@ public class GameListener implements Listener {
                     return;
                 }
                 game.addPoint(arena.getTeam(shooter));
+                hitPlayer.getInventory().addItem(new ItemStack(Material.SNOWBALL, 1));
 
                 for (UUID uuid : arena.getPlayers()) {
                     Player player = Bukkit.getPlayer(uuid);
