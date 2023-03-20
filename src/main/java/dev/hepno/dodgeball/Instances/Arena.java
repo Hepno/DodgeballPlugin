@@ -10,17 +10,19 @@ import dev.hepno.dodgeball.Teams.Team;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
+import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.BoundingBox;
 
 import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Arena {
 
@@ -69,6 +71,24 @@ public class Arena {
         countdown.cancel();
         countdown = new Countdown(plugin, this);
         game = new Game(this);
+
+        // Remove all dropped snowballs in the arena
+        ConfigurationManager.setup(plugin);
+        FileConfiguration config = plugin.getConfig();
+
+        for (Entity entity : Objects.requireNonNull(redSpawn.getWorld()).getEntities()) {
+                // Setup Boundingbox around the arena and remove all snowballs that are inside it
+            BoundingBox arena = BoundingBox.of(new Location(redSpawn.getWorld(),
+                        config.getDouble("arenas." + getId() + "arena-corner-1.x"),
+                        config.getDouble("arenas." + getId() + "arena-corner-1.y"),
+                        config.getDouble("arenas." + getId() + "arena-corner-1.z")),
+                        config.getDouble("arenas." + getId() + "arena-corner-2.x"),
+                        config.getDouble("arenas." + getId() + "arena-corner-2.y"),
+                        config.getDouble("arenas." + getId() + "arena-corner-2.z"));
+            if (entity.getType() == EntityType.DROPPED_ITEM) {
+                entity.remove();
+            }
+        }
     }
 
     // Tools
