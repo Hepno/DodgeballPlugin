@@ -12,6 +12,7 @@ import dev.hepno.dodgeball.Teams.TeamGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public final class Dodgeball extends JavaPlugin {
@@ -30,6 +31,10 @@ public final class Dodgeball extends JavaPlugin {
         databaseManager = new DatabaseManager();
         try {
             databaseManager.connect();
+            // Create table if not exists (uuid, wins, losses, saved base64 inventory)
+            PreparedStatement statement = databaseManager.getConnection().prepareStatement(
+                    "CREATE TABLE IF NOT EXISTS dodgeball (uuid VARCHAR(36) primary key, wins INT, losses INT, inventory TEXT)");
+            statement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

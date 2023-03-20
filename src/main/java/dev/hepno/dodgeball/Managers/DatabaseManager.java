@@ -28,6 +28,8 @@ public class DatabaseManager {
         }
     }
 
+    public Connection getConnection() { return connection; }
+
     // Getters
     public boolean isConnected() { return connection != null; }
 
