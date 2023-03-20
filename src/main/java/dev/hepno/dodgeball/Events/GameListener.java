@@ -13,7 +13,9 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
@@ -37,6 +39,7 @@ public class GameListener implements Listener {
 
         if (event.getEntity().getShooter() instanceof Player && event.getEntity().getType() == EntityType.SNOWBALL) {
                 if (event.getHitEntity() != null && event.getHitEntity() instanceof Player && arena.getState() == GameState.LIVE) {
+                    if (arena.getTeam(hitPlayer) == arena.getTeam(shooter)) { return; }
                     game.addPoint(arena.getTeam(shooter));
 
                     for (UUID uuid : arena.getPlayers()) {
@@ -56,15 +59,15 @@ public class GameListener implements Listener {
         }
     }
 
-}
-
-                /*
-                            for (UUID uuid : arena.getPlayers()) {
-                Player player = Bukkit.getPlayer(uuid);
-            }
-                if (arena.getTeam(event.getPlayer()) == Team.RED) {
-                    player.getScoreboard().getTeam("redPoints").setSuffix(ChatColor.WHITE + " " + arena.getGame().getPoints(Team.RED));
-                } else if (arena.getTeam(event.getPlayer()) == Team.BLUE) {
-                    player.getScoreboard().getTeam("bluePoints").setSuffix(ChatColor.WHITE + " " + arena.getGame().getPoints(Team.BLUE));
+     @EventHandler
+    public void onInjury(EntityDamageEvent event) {
+         if (event.getEntity() instanceof Player) {
+             ArenaManager arenaManager = plugin.getArenaManager();
+             if (arenaManager.getArena((Player) event.getEntity()) == null) return;
+                Arena arena = arenaManager.getArena((Player) event.getEntity());
+                if (arena.getPlayers().contains(event.getEntity().getUniqueId())) {
+                    event.setCancelled(true);
                 }
-                */
+         }
+     }
+}
