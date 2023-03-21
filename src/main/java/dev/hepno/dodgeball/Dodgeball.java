@@ -1,14 +1,12 @@
 package dev.hepno.dodgeball;
 
 import dev.hepno.dodgeball.Commands.ArenaCommand;
-import dev.hepno.dodgeball.Commands.ArenaForceStart;
 import dev.hepno.dodgeball.Events.ConnectListener;
 import dev.hepno.dodgeball.Events.GUIListener;
 import dev.hepno.dodgeball.Events.GameListener;
 import dev.hepno.dodgeball.Managers.ArenaManager;
 import dev.hepno.dodgeball.Managers.ConfigurationManager;
 import dev.hepno.dodgeball.Managers.DatabaseManager;
-import dev.hepno.dodgeball.Teams.TeamGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -53,7 +51,6 @@ public final class Dodgeball extends JavaPlugin {
 
     public void RegisterCommands() {
         getCommand("arena").setExecutor(new ArenaCommand(this));
-        getCommand("arenaforcestart").setExecutor(new ArenaForceStart(this));
     }
 
     public void RegisterEvents() {

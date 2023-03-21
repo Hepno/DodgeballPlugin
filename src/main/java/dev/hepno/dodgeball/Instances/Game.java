@@ -32,6 +32,7 @@ public class Game {
     }
 
     public void start() {
+        // Initialize points
         Dodgeball plugin = arena.getPlugin();
         ConfigurationManager.setup(plugin);
         FileConfiguration config = plugin.getConfig();

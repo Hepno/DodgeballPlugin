@@ -16,6 +16,9 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 public class BukkitSerialization {
+
+	// Class for serializing and deserializing inventories, modified version of https://gist.github.com/graywolf336/8153678
+
 	public static String toBase64(Inventory inventory) {
 
 		try {

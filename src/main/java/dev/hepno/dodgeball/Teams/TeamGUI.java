@@ -14,6 +14,7 @@ public class TeamGUI {
     public TeamGUI(Arena arena, Player player) {
         Inventory gui = Bukkit.createInventory(null, 54, ChatColor.GOLD + "Select a team");
 
+        // Fill the GUI with black stained glass panes
         for (int i = 0; i < 54; i++) {
             ItemStack is = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
             ItemMeta isMeta = is.getItemMeta();
@@ -23,6 +24,7 @@ public class TeamGUI {
             gui.setItem(i, is);
         }
 
+        // Add the teams to the GUI
         for (Team team : Team.values()) {
             ItemStack is = new ItemStack(team.getMaterial());
             ItemMeta isMeta = is.getItemMeta();

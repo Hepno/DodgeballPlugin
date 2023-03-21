@@ -38,8 +38,8 @@ public class GameListener implements Listener {
     public void onSnowballHit(ProjectileHitEvent event) {
 
         if (event.getEntity().getShooter() instanceof Player && event.getEntity().getType() == EntityType.SNOWBALL) {
-            if (!(event.getHitEntity() instanceof Player)) return;
 
+            // Initialize variables
             Player hitPlayer = (Player) event.getHitEntity();
             Player shooter = (Player) event.getEntity().getShooter();
             ArenaManager arenaManager = plugin.getArenaManager();
@@ -48,30 +48,37 @@ public class GameListener implements Listener {
             Game game = arena.getGame();
             FileConfiguration config = plugin.getConfig();
 
-            if (event.getHitEntity() != null && event.getHitEntity() instanceof Player && arena.getState() == GameState.LIVE) {
-                if (arena.getTeam(hitPlayer) == arena.getTeam(shooter)) {
-                    return;
-                }
-                game.addPoint(arena.getTeam(shooter));
-                hitPlayer.getInventory().addItem(new ItemStack(Material.SNOWBALL, 1));
+            if (event.getHitEntity() instanceof Player) {
 
-                for (UUID uuid : arena.getPlayers()) {
-                    Player player = Bukkit.getPlayer(uuid);
-                    if (!(config.getBoolean("use-scoreboard"))) { return; }
-                    if (arena.getTeam(player) == Team.RED) {
-                        player.getScoreboard().getTeam("redPoints").setSuffix(ChatColor.WHITE + " " + arena.getGame().getPoints(Team.RED));
-                    } else if (arena.getTeam(player) == Team.BLUE) {
-                        player.getScoreboard().getTeam("bluePoints").setSuffix(ChatColor.WHITE + " " + arena.getGame().getPoints(Team.BLUE));
+                // Check if its hitting a player while the game is live
+                if (event.getHitEntity() != null && event.getHitEntity() instanceof Player && arena.getState() == GameState.LIVE) {
+                    if (arena.getTeam(hitPlayer) == arena.getTeam(shooter)) { return; }
+                    game.addPoint(arena.getTeam(shooter));
+                    hitPlayer.getInventory().addItem(new ItemStack(Material.SNOWBALL, 1));
+
+                    // Add points to scoreboard
+                    for (UUID uuid : arena.getPlayers()) {
+                        Player player = Bukkit.getPlayer(uuid);
+                        if (!(config.getBoolean("use-scoreboard"))) {
+                            return;
+                        }
+                        if (arena.getTeam(player) == Team.RED) {
+                            player.getScoreboard().getTeam("redPoints").setSuffix(ChatColor.WHITE + " " + arena.getGame().getPoints(Team.RED));
+                        } else if (arena.getTeam(player) == Team.BLUE) {
+                            player.getScoreboard().getTeam("bluePoints").setSuffix(ChatColor.WHITE + " " + arena.getGame().getPoints(Team.BLUE));
+                        }
                     }
                 }
             }
 
+            // Check if snowball is hitting the ground so it can drop a snowball
             if (event.getHitBlock() != null && arena.getState() == GameState.LIVE) {
                 event.getHitBlock().getLocation().getWorld().dropItem(event.getHitBlock().getLocation(), new ItemStack(Material.SNOWBALL));
             }
         }
     }
 
+    // Stop players from taking damage
     @EventHandler
     public void onInjury(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
@@ -84,6 +91,7 @@ public class GameListener implements Listener {
         }
     }
 
+    // Stop players from crossing the middle line
     @EventHandler
     public void onCrossLine(PlayerMoveEvent event) {
         World world = event.getPlayer().getWorld();
@@ -93,6 +101,7 @@ public class GameListener implements Listener {
         Arena arena = plugin.getArenaManager().getArena(event.getPlayer());
         if (arena.getState() != GameState.LIVE) return;
 
+        // Setup a bounding box for the middle line from the config
         BoundingBox redLine = BoundingBox.of(new Location(world, config.getDouble("arenas." + arena.getId()
                 + ".line-corner-1.x"), 0, config.getDouble("arenas." + arena.getId() + ".line-corner-1.z")),
                 new Location(world, config.getDouble("arenas." + arena.getId() + ".line-corner-2.x"), 319,
@@ -110,6 +119,7 @@ public class GameListener implements Listener {
 
     }
 
+    // Stop players from starving
     @EventHandler
     public void onHunger(FoodLevelChangeEvent event) {
         if (event.getEntity() instanceof Player) {
@@ -122,6 +132,7 @@ public class GameListener implements Listener {
         }
     }
 
+    // Stop players from breaking blocks
     @EventHandler
     public void onBreak(BlockBreakEvent event) {
         if (plugin.getArenaManager().getArena(event.getPlayer()) == null) return;
@@ -132,6 +143,7 @@ public class GameListener implements Listener {
         }
     }
 
+    // Stop players from placing blocks
     @EventHandler
     public void onPlace(BlockPlaceEvent event) {
         if (plugin.getArenaManager().getArena(event.getPlayer()) == null) return;

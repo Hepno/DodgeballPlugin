@@ -16,6 +16,8 @@ public class ArenaManager {
 
     public ArenaManager(Dodgeball plugin) {
         FileConfiguration config = plugin.getConfig();
+
+        // Get all the arenas from the config and get their spawn locations
         for (String str : config.getConfigurationSection("arenas.").getKeys(false)) {
             arenas.add(new Arena(plugin, Integer.parseInt(str), new Location(
                     Bukkit.getWorld(config.getString("arenas." + str + ".red-spawn.world")),
@@ -34,6 +36,7 @@ public class ArenaManager {
         }
     }
 
+    // Getters
     public List<Arena> getArenas() { return arenas; }
     public Arena getArena(Player player) {
         for (Arena arena : arenas) {
