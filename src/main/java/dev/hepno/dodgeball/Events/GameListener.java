@@ -38,6 +38,7 @@ public class GameListener implements Listener {
     public void onSnowballHit(ProjectileHitEvent event) {
 
         if (event.getEntity().getShooter() instanceof Player && event.getEntity().getType() == EntityType.SNOWBALL) {
+            if (!(event.getHitEntity() instanceof Player)) return;
 
             Player hitPlayer = (Player) event.getHitEntity();
             Player shooter = (Player) event.getEntity().getShooter();
