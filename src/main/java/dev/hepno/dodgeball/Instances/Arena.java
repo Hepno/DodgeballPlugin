@@ -8,15 +8,15 @@ import dev.hepno.dodgeball.Managers.ConfigurationManager;
 import dev.hepno.dodgeball.Managers.DatabaseManager;
 import dev.hepno.dodgeball.Teams.Team;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Score;
+import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.util.BoundingBox;
 
 import java.io.IOException;
@@ -134,12 +134,33 @@ public class Arena {
             count.put(getTeamCount(team), team);
         }
 
+        // Set the players scoreboard to the waiting room scoreboard
+        Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
+        Objective objective = board.registerNewObjective("DodgeballWR", "dummy");
+        objective.setDisplaySlot(org.bukkit.scoreboard.DisplaySlot.SIDEBAR);
+        objective.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&6&lDodgeball"));
+
+        Score one = objective.getScore(ChatColor.translateAlternateColorCodes('&', " "));
+        one.setScore(5);
+        Score two = objective.getScore(ChatColor.translateAlternateColorCodes('&', "&7Waiting for"));
+        two.setScore(4);
+        Score three = objective.getScore(ChatColor.translateAlternateColorCodes('&', "&7players to join..."));
+        three.setScore(3);
+        Score five = objective.getScore(ChatColor.translateAlternateColorCodes('&', "&e"));
+        five.setScore(2);
+        Score six = objective.getScore(ChatColor.translateAlternateColorCodes('&', "&ewww.example.com"));
+        six.setScore(1);
+
+        player.setScoreboard(board);
+
+        // Teams
         Team lowest = (Team) count.values().toArray()[0];
         setTeam(player, lowest);
         player.sendMessage("§aYou have been put on team " + lowest.getDisplay() + "!");
         ConfigurationManager.setup(plugin);
         FileConfiguration config = plugin.getConfig();
 
+        // Teleport the player to the waiting room
         player.teleport(new Location(Bukkit.getWorld(config.getString("arenas." + getId() + ".waiting_room-spawn.world")),
                 config.getDouble("arenas." + getId() + ".waiting_room-spawn.x"),
                 config.getDouble("arenas." + getId() + ".waiting_room-spawn.y"),
@@ -179,6 +200,8 @@ public class Arena {
         players.remove(player.getUniqueId());
         player.teleport(ConfigurationManager.getLobbySpawn());
         player.sendTitle("", "");
+        Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
+        player.setScoreboard(board);
 
         if (state == GameState.STARTING && players.size() < ConfigurationManager.getRequiredPlayers()) {
             broadcast("§cNot enough players to start the game!");

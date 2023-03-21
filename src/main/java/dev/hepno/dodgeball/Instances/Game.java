@@ -39,8 +39,15 @@ public class Game {
         arena.setState(GameState.LIVE);
         arena.broadcast("Game started!");
 
-        // Build scoreboard
         if (config.getBoolean("use-scoreboard")) {
+
+            // Clear old scoreboard
+            for (UUID uuid : arena.getPlayers()) {
+                Bukkit.getPlayer(uuid).setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+            }
+
+            // Create new scoreboard
+
             Scoreboard board = Bukkit.getScoreboardManager().getNewScoreboard();
             Objective objective = board.registerNewObjective("Dodgeball", "dummy");
             objective.setDisplaySlot(org.bukkit.scoreboard.DisplaySlot.SIDEBAR);
