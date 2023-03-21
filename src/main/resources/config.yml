@@ -9,6 +9,8 @@ database:
   database: minecraft
   username: root
   password: password
+win-commands:
+  - 'say example'
 lobby-spawn:
     world: world
     x: 0.5

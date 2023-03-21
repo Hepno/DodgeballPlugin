@@ -17,6 +17,8 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Game {
@@ -105,6 +107,16 @@ public class Game {
         if (teamPoints == 10) {
             arena.broadcast(team.getDisplay() + " has won the game!");
             arena.reset(true);
+            FileConfiguration config = arena.getPlugin().getConfig();
+            List<String> list = config.getStringList("win-commands");
+            int length = list.size();
+
+            // Run all commands in the win-commands section
+            for (int i = 1; i <= length; i++) {
+                if (list.get(i - 1) != null) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), list.get(i - 1));
+                }
+            }
         }
 
         arena.broadcast(team.getDisplay() + " now has " + teamPoints + " points!");
