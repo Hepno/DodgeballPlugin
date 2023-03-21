@@ -56,7 +56,7 @@ public class GameListener implements Listener {
 
                 for (UUID uuid : arena.getPlayers()) {
                     Player player = Bukkit.getPlayer(uuid);
-                    if (!(config.getBoolean("scoreboard.enabled"))) { return; }
+                    if (!(config.getBoolean("scoreboard-enabled"))) { return; }
                     if (arena.getTeam(player) == Team.RED) {
                         player.getScoreboard().getTeam("redPoints").setSuffix(ChatColor.WHITE + " " + arena.getGame().getPoints(Team.RED));
                     } else if (arena.getTeam(player) == Team.BLUE) {
