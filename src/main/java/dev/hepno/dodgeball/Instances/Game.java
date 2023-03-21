@@ -3,6 +3,7 @@ package dev.hepno.dodgeball.Instances;
 import dev.hepno.dodgeball.Dodgeball;
 import dev.hepno.dodgeball.GameState;
 import dev.hepno.dodgeball.Managers.ConfigurationManager;
+import dev.hepno.dodgeball.Placeholders.PointsPlaceholder;
 import dev.hepno.dodgeball.Teams.Team;
 
 import org.bukkit.Bukkit;
@@ -32,6 +33,7 @@ public class Game {
     }
 
     public void start() {
+
         // Initialize points
         Dodgeball plugin = arena.getPlugin();
         ConfigurationManager.setup(plugin);
