@@ -36,15 +36,17 @@ public class GameListener implements Listener {
 
     @EventHandler
     public void onSnowballHit(ProjectileHitEvent event) {
-        Player hitPlayer = (Player) event.getHitEntity();
-        Player shooter = (Player) event.getEntity().getShooter();
-        ArenaManager arenaManager = plugin.getArenaManager();
-        if (arenaManager.getArena(shooter) == null) return;
-        Arena arena = arenaManager.getArena(shooter);
-        Game game = arena.getGame();
-        FileConfiguration config = plugin.getConfig();
 
         if (event.getEntity().getShooter() instanceof Player && event.getEntity().getType() == EntityType.SNOWBALL) {
+
+            Player hitPlayer = (Player) event.getHitEntity();
+            Player shooter = (Player) event.getEntity().getShooter();
+            ArenaManager arenaManager = plugin.getArenaManager();
+            if (arenaManager.getArena(shooter) == null) return;
+            Arena arena = arenaManager.getArena(shooter);
+            Game game = arena.getGame();
+            FileConfiguration config = plugin.getConfig();
+
             if (event.getHitEntity() != null && event.getHitEntity() instanceof Player && arena.getState() == GameState.LIVE) {
                 if (arena.getTeam(hitPlayer) == arena.getTeam(shooter)) {
                     return;
